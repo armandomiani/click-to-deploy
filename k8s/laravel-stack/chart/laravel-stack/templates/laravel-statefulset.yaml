@@ -1,0 +1,67 @@
+# here you should have only the statefulset
+# but... as is still WIP,  you have everything :D
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-laravel
+  labels: &LaravelDeploymentLabels
+    app.kubernetes.io/name: "{{ .Release.Name }}"
+    app.kubernetes.io/component: laravel
+spec:
+  replicas: 1
+  serviceName: {{ .Release.Name }}-laravel-svc
+  selector:
+    matchLabels: *LaravelDeploymentLabels
+  template:
+    metadata:
+      labels: *LaravelDeploymentLabels
+    spec:
+      containers:
+      - name: laravel
+        image: "{{ .Values.laravel.image.repo }}:{{ .Values.laravel.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - name: fpm-port
+          containerPort: 9000
+        volumeMounts:
+        - name: app-data
+          mountPath: /opt/laravel/data
+        resources:
+          limits:
+            memory: "2G"
+          requests:
+            memory: "2G"
+            cpu: "800m"
+
+
+      # Prometheus to Stackdriver Container
+      {{- if .Values.metrics.exporter.enabled }}
+      - name: prometheus-to-sd
+        image: {{ .Values.metrics.image }}
+        command:
+        - /monitor
+        - --stackdriver-prefix=custom.googleapis.com
+        - --source=laravel:http://localhost:9113/metrics
+        - --pod-id=$(POD_NAME)
+        - --namespace-id=$(POD_NAMESPACE)
+        - --monitored-resource-types=k8s
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: "100m"
+      {{- end }}
+      volumes:
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-laravel
+

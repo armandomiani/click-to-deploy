@@ -1,0 +1,14 @@
+laravel:
+  image:
+    repo: cyberduck/php-fpm-laravel
+    tag: '7.3'
+  persistence:
+    size: 10Gi
+    storageClass: standard
+
+metrics:
+  exporter:
+    enabled: false
+    image: null
+
+enablePublicServiceAndIngress: true

@@ -13,5 +13,6 @@ metrics:
     enabled: true
   exporter:
     enabled: false
-publicIp:
-  available: true
+
+
+enablePublicServiceAndIngress: true

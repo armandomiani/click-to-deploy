@@ -1,0 +1,17 @@
+---
+# Source: laravel-stack/templates/laravel-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: laravel-1-laravel
+  labels: &LaravelDeploymentLabels
+    app.kubernetes.io/name: laravel-1
+    app.kubernetes.io/component: laravel
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "10Gi"
+  storageClassName: "standard"

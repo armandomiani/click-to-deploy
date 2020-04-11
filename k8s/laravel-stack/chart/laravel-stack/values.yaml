@@ -1,7 +1,7 @@
 # Main chart attributes
 
 image:
-  repo: gcr.io/orbitera-dev/laravel7:7.3
+  repo: gcr.io/orbitera-dev/laravel7
   tag: '7.3'
 persistence:
   size: 10Gi

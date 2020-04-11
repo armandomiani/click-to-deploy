@@ -10,6 +10,10 @@ function template() {
     export TLS_CERTIFICATE_KEY="$(cat /tmp/tls.key | base64)"
     export TLS_CERTIFICATE_CRT="$(cat /tmp/tls.crt | base64)"
 
+    if [[ ! -d "deployable/base/" ]]; then
+        mkdir -p "deployable/base"
+    fi
+
     helm template chart/laravel-stack \
         --name "${APP_INSTANCE_NAME}" \
         --namespace "${NAMESPACE}" \
@@ -17,6 +21,7 @@ function template() {
         --set nginx.tls.base64EncodedCertificate="$TLS_CERTIFICATE_CRT" \
         --set nginx.metrics.exporter.enabled="false" \
         --set nginx.metrics.curatedExporter.enabled="false" \
+        --output-dir deployable/base
         > ${APP_INSTANCE_NAME}_manifest.yaml
   echo "Template OK!"
 }

@@ -12,7 +12,7 @@ spec:
   updateStrategy:
     type: RollingUpdate
   serviceName: {{ .Release.Name }}-nginx-svc
-  replicas: {{ .Values.nginx.replicas }}
+  replicas: {{ .Values.replicas }}
   volumeClaimTemplates:
   - metadata:
       name: {{ .Release.Name }}-nginx-pvc
@@ -31,7 +31,7 @@ spec:
       initContainers:
       # This init container is reponsible for creating default index html file
       - name: initialize-volume
-        image: {{ .Values.nginx.initImage }}
+        image: {{ .Values.initImage }}
         imagePullPolicy: Always
         command:
         - /bin/bash
@@ -56,7 +56,7 @@ spec:
           mountPath: /usr/share/nginx/html
       containers:
       - name: nginx
-        image: "{{ .Values.nginx.image.repo }}:{{ .Values.nginx.image.tag }}"
+        image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         resources:
           requests:
@@ -141,44 +141,3 @@ spec:
           items:
           - key: nginx-config.conf
             path: nginx-config.conf
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-nginx-prometheus-svc
-  labels:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: nginx-server
-spec:
-  clusterIP: None
-  ports:
-  - name: prometheus-port
-    port: 9113
-    protocol: TCP
-  selector:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: nginx-server
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}-nginx-svc
-  labels:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: nginx-server
-spec:
-  ports:
-  - name: nginx-http-port
-    port: 80
-    protocol: TCP
-  - name: nginx-https-port
-    port: 443
-    protocol: TCP
-  selector:
-    app.kubernetes.io/name: {{ .Release.Name }}
-    app.kubernetes.io/component: nginx-server
-  {{ if .Values.publicIp.available }}
-  type: LoadBalancer
-  {{ else }}
-  type: ClusterIP
-  {{ end }}

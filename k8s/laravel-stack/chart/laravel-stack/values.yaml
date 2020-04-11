@@ -6,9 +6,21 @@ laravel:
     size: 10Gi
     storageClass: standard
 
+nginx:
+  image:
+    repo: marketplace.gcr.io/google/nginx
+    tag: 1.15
+  replicas: 3
+  initImage: marketplace.gcr.io/google/nginx/debian9:1.15
+
 metrics:
   exporter:
     enabled: false
     image: null
+  curatedExporter:
+    enabled: false
+
+publicIp:
+  enabled: true
 
 enablePublicServiceAndIngress: true

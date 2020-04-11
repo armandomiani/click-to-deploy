@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: laravel
-        image: "{{ .Values.laravel.image.repo }}:{{ .Values.laravel.image.tag }}"
+        image: "{{ .Values.image.repo }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         ports:
         - name: fpm-port

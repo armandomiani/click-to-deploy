@@ -11,5 +11,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: "{{ .Values.laravel.persistence.size}}"
-  storageClassName: "{{ .Values.laravel.persistence.storageClass }}"
+      storage: "{{ .Values.persistence.size}}"
+  storageClassName: "{{ .Values.persistence.storageClass }}"

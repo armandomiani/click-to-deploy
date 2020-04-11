@@ -1,0 +1,9 @@
+actions:
+
+- name: Create key-value pair
+  bashTest:
+    script: |-
+      echo stayhome
+    expect:
+      exitCode:
+        equals: 0

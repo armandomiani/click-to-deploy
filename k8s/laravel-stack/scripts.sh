@@ -15,6 +15,8 @@ function template() {
         --namespace "${NAMESPACE}" \
         --set nginx.tls.base64EncodedPrivateKey="$TLS_CERTIFICATE_KEY" \
         --set nginx.tls.base64EncodedCertificate="$TLS_CERTIFICATE_CRT" \
+        --set nginx.metrics.exporter.enabled="false" \
+        --set nginx.metrics.curatedExporter.enabled="false" \
         > ${APP_INSTANCE_NAME}_manifest.yaml
   echo "Template OK!"
 }

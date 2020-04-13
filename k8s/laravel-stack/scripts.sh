@@ -21,7 +21,7 @@ function template() {
         --set nginx.tls.base64EncodedCertificate="$TLS_CERTIFICATE_CRT" \
         --set nginx.metrics.exporter.enabled="false" \
         --set nginx.metrics.curatedExporter.enabled="false" \
-        --output-dir deployable/base
+        --output-dir .deployable/base
         > ${APP_INSTANCE_NAME}_manifest.yaml
   echo "Template OK!"
 }

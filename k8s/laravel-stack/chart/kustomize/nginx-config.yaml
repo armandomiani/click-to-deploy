@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ${RELEASE_NAME}-nginx-configmap
+  name: ${APP_INSTANCE_NAME}-nginx-configmap
   labels:
     app.kubernetes.io/component: nginx-server
 data:
